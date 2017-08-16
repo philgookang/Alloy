@@ -1,6 +1,6 @@
 <?php
 
-Map::path('hello', function() {
+Map::path('hello', array('prehook'=> 'MemberLoginCheck'), function() {
     echo 'Hello World';
 });
 
