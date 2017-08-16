@@ -100,6 +100,16 @@ class MapPath {
         return $this->posthookCallback;
     }
 
+    public function before($hooks) {
+        $this->setPrehookCallback($hooks);
+        return $this;
+    }
+
+    public function after($hooks) {
+        $this->setPosthookCallback($hooks);
+        return $this;
+    }
+
     /**
      * When there is a url access to this path,
      * call the callback with parameters
