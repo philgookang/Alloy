@@ -55,8 +55,14 @@ class Alloy {
 
     private function call_map() {
 
+        // call route config
+        require_once('./application/config/route.php');
+
+        // url uri
+        $uri = ($_SERVER['REQUEST_URI'] == '/') ? $map['default'] : $_SERVER['REQUEST_URI'];
+
         // get uri list
-        $uri_list = array_filter(explode('/', $_SERVER['REQUEST_URI']));
+        $uri_list = array_filter(explode('/', $uri));
 
         // get hash key
         $key = hash_array($uri_list);
