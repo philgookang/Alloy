@@ -1,6 +1,7 @@
 <?php
 
 require_once('./application/system/helper/Filter.php');
+require_once('./application/system/helper/File.php');
 
 require_once('./application/system/hook/Hook.php');
 require_once('./application/system/hook/HookEvent.php');
@@ -25,15 +26,14 @@ class Alloy {
     private function load_map($filepath = './application/route/') {
 
         // list through map directory, load all maps into memory
-        $file_list = array_diff(scandir($filepath), array('..','.'));
+        $file_list = list_files($filepath);
 
         // go through list of models and include each file
         foreach($file_list as $file) {
-            $ext = pathinfo($file, PATHINFO_EXTENSION);
-            if ($ext == 'php') {
-                require_once $filepath . $file;
+            if ($file['ext'] == 'php') {
+                require_once $filepath . $file['name'];
             } else {
-                $this->load_map($filepath.$file.'/');
+                $this->load_map($filepath.$file['name'].'/');
             }
         }
     }
@@ -41,15 +41,14 @@ class Alloy {
     private function load_hook($filepath = './application/hook/') {
 
         // list through map directory, load all maps into memory
-        $file_list = array_diff(scandir($filepath), array('..','.'));
+        $file_list = list_files($filepath);
 
         // go through list of models and include each file
         foreach($file_list as $file) {
-            $ext = pathinfo($file, PATHINFO_EXTENSION);
-            if ($ext == 'php') {
-                require_once $filepath . $file;
+            if ($file['ext'] == 'php') {
+                require_once $filepath . $file['name'];
             } else {
-                $this->load_map($filepath.$file.'/');
+                $this->load_map($filepath.$file['name'].'/');
             }
         }
     }
