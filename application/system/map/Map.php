@@ -89,6 +89,9 @@ class Map {
         // save to path list
         // array_push($path_list, $path);
         $map->path_list[$key] = $path;
+
+        // return new path
+        return $path;
 	}
 
     /**
