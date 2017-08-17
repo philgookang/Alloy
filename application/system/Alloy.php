@@ -9,6 +9,8 @@ require_once('./application/system/hook/HookEvent.php');
 require_once('./application/system/map/Map.php');
 require_once('./application/system/map/MapPath.php');
 
+require_once('./application/system/vendor/v8js/ReactJS.php');
+
 class Alloy {
 
     public function GodSpeed() {
