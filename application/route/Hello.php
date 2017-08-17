@@ -1,22 +1,17 @@
 <?php
 
-Map::path('hello', array('prehook'=> 'MemberLoginCheck'), function() {
+Map::path('hello', function() {
+
+})
+->before('MemberLoginCheck')
+->after(function() {
+    echo '----------------------------------------------';
+});
+
+Map::path('hello/pre', function() {
     echo 'Hello World';
 });
 
-Map::path('hello/pre', array(
-    'prehook' => function() {
-            echo 'Prehook Hooker';
-            return true;
-        }
-), function() {
-    echo 'Hello World';
-});
-
-Map::path('hello/post', array(
-    'posthook' => function() {
-            echo 'Posthook Hooker';
-        }
-), function() {
+Map::path('hello/post', function() {
     echo 'Hello World';
 });
