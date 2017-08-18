@@ -2,16 +2,11 @@
 
 Map::path('hello', function() {
 
-})
-->before('MemberLoginCheck')
-->after(function() {
-    echo '----------------------------------------------';
-});
+    $data['data'] = array(
+        array(1, 2, 3),
+        array(4, 5, 6),
+        array(7, 8, 9)
+    );
 
-Map::path('hello/pre', function() {
-    echo 'Hello World';
-});
-
-Map::path('hello/post', function() {
-    echo 'Hello World';
+    $this->load->view('Table', 'table.js', $data);
 });

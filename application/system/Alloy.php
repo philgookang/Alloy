@@ -9,6 +9,9 @@ require_once('./application/system/hook/HookEvent.php');
 require_once('./application/system/map/Map.php');
 require_once('./application/system/map/MapPath.php');
 
+require_once('./application/system/Loader.php');
+require_once('./application/system/Viewer.php');
+
 require_once('./application/system/vendor/v8js/ReactJS.php');
 
 class Alloy {
@@ -20,6 +23,9 @@ class Alloy {
 
         // load all prehooks
         $this->load_hook();
+
+        // create loader
+        $this->load_variable();
 
         // call map to load
         $this->call_map();
@@ -55,6 +61,12 @@ class Alloy {
         }
     }
 
+    private function load_variable() {
+
+        // set new loader
+        $this->load = new Loader();
+    }
+
     private function call_map() {
 
         // call route config
@@ -70,6 +82,8 @@ class Alloy {
         $key = hash_array($uri_list);
 
         $map = Map::init();
-        $map->view($key);
+        $map->view($key, function() {
+            $this->load->drawer();
+        });
     }
 }

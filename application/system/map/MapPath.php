@@ -114,7 +114,7 @@ class MapPath {
      * When there is a url access to this path,
      * call the callback with parameters
      */
-    public function run() {
+    public function run($callback_loader) {
 
         // check if prehook has no problem
         $proceed = true;
@@ -147,6 +147,9 @@ class MapPath {
             // $this->callback();
             call_user_func_array($this->callback, array());
             // call_user_func_array();
+
+            // call callback to start view loading
+            call_user_func_array($callback_loader, array());
         }
 
         // check is posthook is set

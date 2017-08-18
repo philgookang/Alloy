@@ -97,7 +97,7 @@ class Map {
     /**
      * Look through path list call map item
      */
-    public function view($key) {
+    public function view($key, $callback_loader) {
 
         // check if path exist
         if (!isset($this->path_list[$key])) {
@@ -108,6 +108,6 @@ class Map {
         $map_path = $this->path_list[$key];
 
         // start path
-        $map_path->run();
+        $map_path->run($callback_loader);
     }
 }
