@@ -6,7 +6,7 @@ function list_files($path) {
     $return_list = array();
 
     // list through map directory, load all maps into memory
-    $file_list = array_diff(scandir($path), array('..','.'));
+    $file_list = array_diff(scandir($path), array('..','.', 'index.html'));
 
     // go through list of models and include each file
     foreach($file_list as $file) {
