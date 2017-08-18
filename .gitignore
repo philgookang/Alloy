@@ -64,6 +64,9 @@ typings/
 # dependencies
 /node_modules
 
+# hide generate files in public
+/public/js/generate
+
 # testing
 /coverage
 
