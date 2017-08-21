@@ -10,3 +10,11 @@ Map::path('hello', function() {
 
     $this->load->view('Table', 'table.js', $data);
 });
+
+Map::path('hello/view/{string}', function($idx) {
+    echo 'hello view';
+});
+
+Map::path('hello/view/{string}/{integer}', function($name, $age) {
+    echo 'this is longer ' . $name . ' ' . $age;
+});
