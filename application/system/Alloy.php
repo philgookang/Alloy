@@ -25,6 +25,25 @@ class Alloy {
     public $config = array();
 
     /**
+     * Alloy single instance object
+     */
+    private static $singleton;
+
+    /**
+     * Create/Retrieve's a instance of the Map
+     *
+     * @return Map instance
+     */
+    public static function init() {
+		// check if the instance has been created before
+		if ( Alloy::$singleton == null) {
+			// create new object
+			Alloy::$singleton = new Alloy();
+		}
+		return Alloy::$singleton;
+	}
+
+    /**
      * The boot function of Alloy
      */
     public function GodSpeed() {
