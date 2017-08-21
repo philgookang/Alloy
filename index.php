@@ -6,5 +6,5 @@ error_reporting(E_ALL);
 
 require_once('./application/system/Alloy.php');
 
-$alloy = new Alloy();
+$alloy = Alloy::init();
 $alloy->GodSpeed();
