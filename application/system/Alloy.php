@@ -8,6 +8,7 @@ require_once('./application/system/hook/HookEvent.php');
 
 require_once('./application/system/map/Map.php');
 require_once('./application/system/map/MapPath.php');
+require_once('./application/system/map/MapUrl.php');
 
 require_once('./application/system/Loader.php');
 require_once('./application/system/Viewer.php');
@@ -79,10 +80,10 @@ class Alloy {
         $uri_list = array_filter(explode('/', $uri));
 
         // get hash key
-        $key = hash_array($uri_list);
+        $key_list = clean_array($uri_list);
 
         $map = Map::init();
-        $map->view($key, function() {
+        $map->view($key_list, function() {
             $this->load->drawer();
         });
     }
