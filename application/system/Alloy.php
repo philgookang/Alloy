@@ -19,7 +19,18 @@ require_once('./application/system/vendor/v8js/ReactJS.php');
 
 class Alloy {
 
+    /**
+     * A config array that holds all the config
+     */
+    public $config = array();
+
+    /**
+     * The boot function of Alloy
+     */
     public function GodSpeed() {
+
+        // load all configs
+        $this->load_config();
 
         // load all maps
         $this->load_map();
@@ -32,6 +43,21 @@ class Alloy {
 
         // call map to load
         $this->call_map();
+    }
+
+    private function load_config($filepath = './application/config/') {
+
+        // list through map directory, load all maps into memory
+        $file_list = list_files($filepath);
+
+        // go through list of models and include each file
+        foreach($file_list as $file) {
+            require_once $filepath . $file['name'];
+            $config_name = pathinfo($file['name'], PATHINFO_FILENAME);
+            foreach($config as $key=>$val) {
+                $this->config[$config_name][$key] = $val;
+            }
+        }
     }
 
     private function load_map($filepath = './application/route/') {
@@ -72,11 +98,8 @@ class Alloy {
 
     private function call_map() {
 
-        // call route config
-        require_once('./application/config/route.php');
-
         // url uri
-        $uri = ($_SERVER['REQUEST_URI'] == '/') ? $map['default'] : $_SERVER['REQUEST_URI'];
+        $uri = ($_SERVER['REQUEST_URI'] == '/') ? $this->config['route']['default'] : $_SERVER['REQUEST_URI'];
 
         // get uri list
         $uri_list = array_filter(explode('/', $uri));
