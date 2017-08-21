@@ -83,12 +83,20 @@ class Map {
             }
         }
 
-        // create hash key
-        $key = hash_array( array_filter(explode('/', $arg_list[0])) );
+        // get path uri list
+        $key = array_filter(explode('/', $arg_list[0]));
+
+        // clean array, missing indexes
+        $key = clean_array($key);
+
+        // loop through and save uri
+        foreach($key as $uri) {
+            $path->addUri($uri);
+        }
 
         // save to path list
-        // array_push($path_list, $path);
-        $map->path_list[$key] = $path;
+        array_push($map->path_list, $path);
+        // $map->path_list[$key] = $path;
 
         // return new path
         return $path;
@@ -97,8 +105,22 @@ class Map {
     /**
      * Look through path list call map item
      */
-    public function view($key, $callback_loader) {
+    public function view($key, $callback_loader) { 
 
+        // go through list of paths
+        foreach($this->path_list as $path) {
+
+            // check if the path matches
+            $result = $path->compareUri($key);
+
+            // check if matches
+            if ($result['matches']) {
+
+                // if matches, call it!
+                $path->run($result['args'], $callback_loader);
+            }
+        }
+        /*
         // check if path exist
         if (!isset($this->path_list[$key])) {
             die('view not found');
@@ -109,5 +131,6 @@ class Map {
 
         // start path
         $map_path->run($callback_loader);
+        */
     }
 }

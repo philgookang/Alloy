@@ -5,6 +5,9 @@ class MapPath {
     // path string url
     private $url;
 
+    // path array uri
+    private $uri = array();
+
     // callback function
     private $callback;
 
@@ -31,6 +34,113 @@ class MapPath {
      */
     public function getUrl() {
         return $this->url;
+    }
+
+    /**
+     * Set the array path uri
+     *
+     * @param array path uri
+     *
+     */
+    public function setUri($uri) {
+        $this->uri = $uri; return $this;
+    }
+
+    /**
+     * Retrieve a uri array
+     *
+     * @return array
+     */
+    public function getUri() {
+        return $this->uri;
+    }
+
+    /**
+     * Check if uri is same as mine!
+     *
+     * @return boolean
+     */
+    public function compareUri($key_list) {
+
+        // check wither uri matches
+        $matches    = true;
+
+        // saves args
+        $args       = array();
+
+        // uri count
+        $uri_count = count($this->uri);
+
+        // if incoming url is larger than current, than something is wrong, skip it!
+        if ($uri_count < count($key_list)) {
+            // set not found
+            $matches = false;
+
+            // set loop to 0, prevent looping
+            $uri_count = 0;
+        }
+
+        // loop through uri and match variables
+        for ($i = 0; $i < $uri_count; $i++) {
+
+            $map_uri    = $this->uri[$i];
+            $uri_string = (isset($key_list[$i])) ? $key_list[$i] : null;
+
+            if ($map_uri->getUri(true) == "{integer}") {
+
+                if ($uri_string == null) {
+                    $default = $map_uri->getUriDefaultValue();
+                    if (isset($default[1])) {
+                        $uri_string = intval($default[1]);
+                    }
+                } else {
+                    $uri_string = intval($uri_string);
+                }
+                array_push($args, $uri_string);
+            } else if ($map_uri->getUri(true) == "{string}") {
+
+                if ($uri_string == null) {
+                    $default = $map_uri->getUriDefaultValue();
+                    if (isset($default[1])) {
+                        $uri_string = (string)$default[1];
+                    }
+                } else {
+                    $uri_string = (string)$uri_string;
+                }
+                array_push($args, $uri_string);
+            } else {
+                if ($map_uri->getUri() == $uri_string) {
+
+                } else {
+                    // des not match
+                    $matches = false;
+                    break;
+                }
+            }
+        }
+
+        return array('matches' => $matches, 'args' => $args);
+    }
+
+    /**
+     * Add a map uri item
+     *
+     */
+    public function addUri($key) {
+
+        // create url map item
+        $uri = new MapUrl();
+        $uri->setUri($key);
+
+        // check if the key is a number
+        if (is_numeric($key)) {
+            $uri->setType(MapUriType::INTEGER);
+        } else {
+            $uri->setType(MapUriType::STRING);
+        }
+
+        // push to list
+        array_push($this->uri, $uri);
     }
 
     /**
@@ -114,7 +224,7 @@ class MapPath {
      * When there is a url access to this path,
      * call the callback with parameters
      */
-    public function run($callback_loader) {
+    public function run($args, $callback_loader) {
 
         // check if prehook has no problem
         $proceed = true;
@@ -145,7 +255,7 @@ class MapPath {
         // give callback a call
         if ($proceed) {
             // $this->callback();
-            call_user_func_array($this->callback, array());
+            call_user_func_array($this->callback, $args);
             // call_user_func_array();
 
             // call callback to start view loading
