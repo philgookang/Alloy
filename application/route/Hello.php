@@ -11,6 +11,14 @@ Map::path('hello', function() {
     $this->load->view('Table', 'table.js', $data);
 });
 
+Map::path('POST', 'hello', function() {
+    echo 'This Is Hello POST';
+});
+
+Map::path('PUT', 'hello', function() {
+    echo 'This Is Hello PUT';
+});
+
 Map::path('hello/view/{string}', function($idx) {
     echo 'hello view';
 });
