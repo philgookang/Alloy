@@ -65,7 +65,7 @@ typings/
 /node_modules
 
 # hide generate files in public
-/public/js/generate
+/public/js/generate/*.js
 
 # testing
 /coverage
