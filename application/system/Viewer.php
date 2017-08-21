@@ -60,7 +60,15 @@ class Viewer {
         include $this->core_template;
         $html =  ob_get_clean();
 
-        // $html =$this->minify_html($html);
+        // get alloy instance
+        $alloy = Alloy::init();
+
+        // check if minify html config is on
+        if ($alloy->config['view']['html_minify']) {
+
+            // minify html
+            $html =$this->minify_html($html);
+        }
 
         echo $html;
     }
