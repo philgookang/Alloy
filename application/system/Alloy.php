@@ -10,6 +10,8 @@ require_once('./application/system/map/Map.php');
 require_once('./application/system/map/MapPath.php');
 require_once('./application/system/map/MapUrl.php');
 
+require_once('./application/system/security/Input.php');
+
 require_once('./application/system/Loader.php');
 require_once('./application/system/Viewer.php');
 
