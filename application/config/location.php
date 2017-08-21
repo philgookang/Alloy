@@ -1,3 +1,3 @@
 <?php
 
-$location = array();
+$config = array();

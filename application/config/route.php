@@ -1,4 +1,4 @@
 <?php
 
-$map = array();
-$map['default'] = 'hello';
+$config = array();
+$config['default'] = 'hello';

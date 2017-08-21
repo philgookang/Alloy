@@ -1,3 +1,3 @@
 <?php
 
-$database = array();
+$config = array();
