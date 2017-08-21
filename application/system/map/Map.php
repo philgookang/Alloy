@@ -56,35 +56,63 @@ class Map {
             die('url path is not a string!');
         }
 
+        // check if were using request method
+        if (in_array($arg_list[0], array('POST', 'GET', 'PUT', 'DELETE', 'OPTION', 'HEAD'))) {
+
+            // if we are using request method check for path string
+            // check if path is a string
+            if (!is_string($arg_list[1])) {
+                die('url path is not a string!');
+            }
+        }
+
         // check if callback is a function
         if (!is_callable($arg_list[($num_args-1)])) {
             die('callback is not a function');
         }
 
-        // create new path
-        $path = new MapPath();
-        $path->setUrl($arg_list[0])
-             ->setCallback($arg_list[($num_args-1)]);
+        // variables
+        $url = '';
+        $request_method = 'GET';
 
-        // check if additional params
-        if ($num_args == 3) {
-
-            // get extra array
-            $param = $arg_list[1];
-
-            // before view is called, prehook action
-            if (isset($param['prehook'])) {
-                $path->setPrehookCallback( $param['prehook'] );
-            }
-
-            // after view is called, posthook
-            if (isset($param['posthook'])) {
-                $path->setPosthookCallback( $param['posthook'] );
-            }
+        // check if request method is send
+        if (in_array($arg_list[0], array('POST', 'GET', 'PUT', 'DELETE', 'OPTION', 'HEAD'))) {
+            $request_method = $arg_list[0];
+            $url = $arg_list[1];
+        } else {
+            $url = $arg_list[0];
         }
 
+        // create new path
+        $path = new MapPath();
+        $path->setCallback($arg_list[($num_args-1)]);
+        $path->setRequestMethod($request_method);
+        $path->setUrl($url);
+
+        ////////////////////////
+
+        // get extra array
+        $param = array();
+        if (in_array($arg_list[0], array('POST', 'GET', 'PUT', 'DELETE', 'OPTION', 'HEAD')) && isset($arg_list[1])) {
+            $param = $arg_list[1];
+        } else if (isset($arg_list[2])) {
+            $param = $arg_list[2];
+        }
+
+        // before view is called, prehook action
+        if (is_array($param) && isset($param['prehook'])) {
+            $path->setPrehookCallback( $param['prehook'] );
+        }
+
+        // after view is called, posthook
+        if (is_array($param) && isset($param['posthook'])) {
+            $path->setPosthookCallback( $param['posthook'] );
+        }
+
+        //////////////////////////
+
         // get path uri list
-        $key = array_filter(explode('/', $arg_list[0]));
+        $key = array_filter(explode('/', $url));
 
         // clean array, missing indexes
         $key = clean_array($key);
@@ -105,7 +133,7 @@ class Map {
     /**
      * Look through path list call map item
      */
-    public function view($key, $callback_loader) { 
+    public function view($key, $callback_loader) {
 
         // go through list of paths
         foreach($this->path_list as $path) {
@@ -118,6 +146,7 @@ class Map {
 
                 // if matches, call it!
                 $path->run($result['args'], $callback_loader);
+                break;
             }
         }
         /*

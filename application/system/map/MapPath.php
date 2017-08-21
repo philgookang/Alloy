@@ -2,6 +2,9 @@
 
 class MapPath {
 
+    // request method
+    private $request_method = null;
+
     // path string url
     private $url;
 
@@ -16,6 +19,26 @@ class MapPath {
 
     // posthook callback function
     private $posthookCallback = null;
+
+    /**
+     * Set the request method
+     *
+     * @param request_method request_method
+     *
+     */
+     public function setRequestMethod($request_method) {
+        $this->request_method = $request_method; return $this;
+     }
+
+     /**
+      * Get the request method
+      *
+      * @return request_method
+      *
+      */
+      public function getRequestMethod() {
+        return $this->request_method;
+      }
 
     /**
      * Set the path url
@@ -73,6 +96,18 @@ class MapPath {
 
         // if incoming url is larger than current, than something is wrong, skip it!
         if ($uri_count < count($key_list)) {
+            // set not found
+            $matches = false;
+
+            // set loop to 0, prevent looping
+            $uri_count = 0;
+        }
+
+        // get request method
+        $REQUEST_METHOD = (isset($_SERVER["REQUEST_METHOD"])) ? $_SERVER["REQUEST_METHOD"] : '';
+
+        // check if we have the same required request  method
+        if (($this->getRequestMethod() != '') && ($this->getRequestMethod() != $REQUEST_METHOD)) {
             // set not found
             $matches = false;
 
