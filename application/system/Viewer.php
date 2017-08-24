@@ -5,15 +5,54 @@ class Viewer {
     private $core_template = './public/html/index.php';
     public $view_list = array();
 
-    public function addView($name, $filename, $data) {
+    public function addView($name, $filename, $target, $data) {
         array_push($this->view_list, array(
-            'name' => $name,
-            'filename' => $filename,
-            'data' => $data
+            'name'      => $name,
+            'filename'  => $filename,
+            'target'    => $target,
+            'data'      => $data
         ));
     }
 
     public function generate() {
+
+        // get alloy instance
+        $alloy = Alloy::init();
+
+        if ($alloy->config['view']['html_minify'] == 'react') {
+            $view_file = $this->react_view();
+        } else if ($alloy->config['view']['view_type'] == 'html') {
+            foreach($this->view_list as $view) {
+                $this->unload('./application/view/' . $view['filename'], $view['data']);
+            }
+        }
+    }
+
+    private function unload($file, $args) {
+
+        // get alloy instance
+        $alloy = Alloy::init();
+
+        // Make values in the associative array easier to access by extracting them
+        extract($args);
+
+        // buffer the output (including the file is "output")
+        ob_start();
+        include $file;
+        $html =  ob_get_clean();
+
+
+        // check if minify html config is on
+        if ($alloy->config['view']['html_minify']) {
+
+            // minify html
+            $html = $this->minify_html($html);
+        }
+
+        echo $html;
+    }
+
+    private function react_view() {
 
         // layout structure
         $layout_structure = array();
@@ -35,11 +74,15 @@ class Viewer {
             // create unquie_key for element
             $unquie_key = md5(uniqid());
 
+            $unquie_key = $view['target'];
+
+            // 'markup'    => '<div id="'.$unquie_key.'">' . $rjs->getMarkup() . '</div>',
+
             // save data
             array_push($layout_structure, array(
                 'key'       => $unquie_key,
-                'src'       => './public/js/generate/' . $view['filename'],
-                'markup'    => '<div id="'.$unquie_key.'">' . $rjs->getMarkup() . '</div>',
+                'src'       => '/public/js/generate/' . $view['filename'],
+                'markup'    => '',
                 'js'        => '<script>' . $rjs->getJS("#".$unquie_key, "GLOB") . '</script>'
             ));
         }
@@ -52,25 +95,7 @@ class Viewer {
             die('Core Template File Missing');
         }
 
-        // Make values in the associative array easier to access by extracting them
-        extract($args);
-
-        // buffer the output (including the file is "output")
-        ob_start();
-        include $this->core_template;
-        $html =  ob_get_clean();
-
-        // get alloy instance
-        $alloy = Alloy::init();
-
-        // check if minify html config is on
-        if ($alloy->config['view']['html_minify']) {
-
-            // minify html
-            $html =$this->minify_html($html);
-        }
-
-        echo $html;
+        $this->unload($this->core_template, $args);
     }
 
     // https://stackoverflow.com/questions/6225351/how-to-minify-php-page-html-output
