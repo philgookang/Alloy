@@ -3,10 +3,10 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "make": "npm run make-dev && npm run make-min && npm run make-table",
-    "make-dev": "browserify -t [ envify --NODE_ENV development ] src/react-bundle.js > ../../public/js/generate/react-bundle.js",
-    "make-min": "browserify -t [ envify --NODE_ENV production ] src/react-bundle.js | uglifyjs > ../../public/js/generate/react-bundle.min.js",
-    "make-table": "babel --presets react src/table.js > ../../public/js/generate/table.js"
+    "make": "npm run make-dev && npm run make-min && npm run make-hello ",
+    "make-dev": "browserify -t [ envify --NODE_ENV development ] react-bundle.js > ../../public/js/generate/react-bundle.js",
+    "make-min": "browserify -t [ envify --NODE_ENV production ] react-bundle.js | uglifyjs > ../../public/js/generate/react-bundle.min.js",
+    "make-hello": "babel --presets react hello.js > ../../public/js/generate/hello.js "
   },
   "dependencies": {
     "babel-cli": "^6.3.17",
