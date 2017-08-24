@@ -62,6 +62,27 @@ class ReactJS {
     $concatenated = implode(";\n", $react);
 
     $this->v8 = new V8Js();
+    /*
+    $this->v8->setModuleLoader(function($module) {
+
+        if ($module == 'react') {
+            return file_get_contents('./public/js/generate/react-bundle.min.js');
+        }
+        else if ($module == 'react-dom') {
+            return '';
+        }
+        else if ($module == 'react-dom/server') {
+            return '';
+        }
+
+
+        $public = '/public/js/generate/'.$module.'.js';
+        $public2 = './public/js/generate/'.$module.'.js';
+        $private = './application/view/'.$module.'.js';
+
+        return file_get_contents($public2);
+    });
+    */
     $this->executeJS($concatenated);
   }
 
