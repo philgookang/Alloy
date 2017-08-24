@@ -1,28 +1,9 @@
 <?php
 
 Map::path('hello', function() {
-
-    $data['data'] = array(
-        array(1, 2, 3),
-        array(4, 5, 6),
-        array(7, 8, 9)
-    );
-
-    $this->load->view('Table', 'table.js', $data);
-});
-
-Map::path('POST', 'hello', function() {
-    echo 'This Is Hello POST';
-});
-
-Map::path('PUT', 'hello', function() {
-    echo 'This Is Hello PUT';
-});
-
-Map::path('hello/view/{string}', function($idx) {
-    echo 'hello view';
-});
-
-Map::path('hello/view/{string}/{integer}', function($name, $age) {
-    echo 'this is longer ' . $name . ' ' . $age;
+    if ($this->config['view']['view_type'] == 'html') {
+        $this->load->html('hello.php', array());
+    } else if ($this->config['view']['view_type'] == 'react') {
+        $this->load->view('Hello', 'hello.js', 'root', array('data' => array('happy' => ':]', 'name' => 'alloy')));
+    }
 });
