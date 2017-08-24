@@ -15,7 +15,7 @@ require_once('./application/system/security/Input.php');
 require_once('./application/system/Loader.php');
 require_once('./application/system/Viewer.php');
 
-require_once('./application/system/vendor/v8js/ReactJS.php');
+require_once('./application/system/vendor/v8js/autoload.php');
 
 class Alloy {
 
