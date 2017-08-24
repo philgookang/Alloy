@@ -8,8 +8,12 @@ class Loader {
         $this->viewer = new Viewer();
     }
 
-    public function view($name, $filename = '', $data = array()) {
-        $this->viewer->addView($name, $filename, $data);
+    public function view($name, $filename = '', $target, $data = array()) {
+        $this->viewer->addView($name, $filename, $target, $data);
+    }
+
+    public function html($filename = '', $data = array()) {
+        $this->viewer->addView('', $filename, '', $data);
     }
 
     public function drawer() {
