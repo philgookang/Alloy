@@ -23,7 +23,8 @@ class Viewer {
             $view_file = $this->react_view();
         } else if ($alloy->config['view']['view_type'] == 'html') {
             foreach($this->view_list as $view) {
-                $this->unload('./application/view/' . $view['filename'], $view['data']);
+                $filename = str_replace('.php', '', $view['filename']);
+                $this->unload('./application/view/' . $filename . '.php', $view['data']);
             }
         }
     }
