@@ -1,5 +1,6 @@
 <?php
 
+require_once('./application/system/helper/Cli.php');
 require_once('./application/system/helper/Filter.php');
 require_once('./application/system/helper/File.php');
 
@@ -9,13 +10,17 @@ require_once('./application/system/hook/HookEvent.php');
 require_once('./application/system/map/Map.php');
 require_once('./application/system/map/MapPath.php');
 require_once('./application/system/map/MapUrl.php');
+require_once('./application/system/map/MapTree.php');
+require_once('./application/system/map/MapTreeNode.php');
 
 require_once('./application/system/security/Input.php');
 
 require_once('./application/system/Loader.php');
 require_once('./application/system/Viewer.php');
+require_once('./application/system/WebConnect.php');
 
 require_once('./application/system/vendor/v8js/autoload.php');
+require_once('./application/system/vendor/WebSocket/autoload.php');
 
 class Alloy {
 
@@ -28,6 +33,11 @@ class Alloy {
      * Alloy single instance object
      */
     private static $singleton;
+
+    /**
+     *
+     */
+    private $load;
 
     /**
      * Create/Retrieve's a instance of the Map
@@ -61,7 +71,12 @@ class Alloy {
         $this->load_variable();
 
         // call map to load
-        $this->call_map();
+        // this has been changed
+        // legacy code before we had socket feature
+        // $this->call_map();
+
+        // call web access
+        $this->call_web();
     }
 
     private function load_config($filepath = './application/config/') {
@@ -115,16 +130,25 @@ class Alloy {
         $this->load = new Loader();
     }
 
-    private function call_map() {
+    private function call_web() {
 
-        // url uri
-        $uri = ($_SERVER['REQUEST_URI'] == '/') ? $this->config['route']['default'] : $_SERVER['REQUEST_URI'];
 
-        // get uri list
-        $uri_list = array_filter(explode('/', $uri));
 
-        // get hash key
-        $key_list = clean_array($uri_list);
+        // check if socket is enabled
+        if ($this->config['socket']['enabled']) {
+
+            // for socket,
+            // the socket calls the call_map function web there is activity, thats all
+            // so we don't need to do it here
+
+        } else {
+
+            $key_list = $this->load->wc->getAccessUrl();
+            $this->call_map($key_list);
+        }
+    }
+
+    private function call_map($key_list) {
 
         $map = Map::init();
         $map->view($key_list, function() {
