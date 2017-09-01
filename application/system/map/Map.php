@@ -8,11 +8,9 @@ class Map {
     private static $singleton;
 
     /**
-     * List that holds all the paths
+     * Maptree that holds the B+ Tree
      */
-    private $path_list = array(
-
-    );
+    public $tree;
 
     /**
      * Create/Retrieve's a instance of the Map
@@ -24,6 +22,9 @@ class Map {
 		if ( Map::$singleton == null) {
 			// create new object
 			Map::$singleton = new Map();
+
+            // create new map tree
+            Map::$singleton->tree = new MapTree();
 		}
 		return Map::$singleton;
 	}
@@ -117,14 +118,18 @@ class Map {
         // clean array, missing indexes
         $key = clean_array($key);
 
+        // added request method
+        $path->addUri($request_method);
+
         // loop through and save uri
         foreach($key as $uri) {
             $path->addUri($uri);
         }
 
+
         // save to path list
-        array_push($map->path_list, $path);
-        // $map->path_list[$key] = $path;
+        $map->tree->add(0, $path);
+
 
         // return new path
         return $path;
@@ -135,31 +140,15 @@ class Map {
      */
     public function view($key, $callback_loader) {
 
-        // go through list of paths
-        foreach($this->path_list as $path) {
+        // map object
+        $map = Map::init();
 
-            // check if the path matches
-            $result = $path->compareUri($key);
+        // check if the path matches
+        $result = $map->tree->search(0, $key, $map->tree->tree, $callback_loader);
 
-            // check if matches
-            if ($result['matches']) {
-
-                // if matches, call it!
-                $path->run($result['args'], $callback_loader);
-                break;
-            }
+        // we cannot find view, we've got a problem
+        if (!$result) {
+            echo 'view not found';
         }
-        /*
-        // check if path exist
-        if (!isset($this->path_list[$key])) {
-            die('view not found');
-        }
-
-        // get map item
-        $map_path = $this->path_list[$key];
-
-        // start path
-        $map_path->run($callback_loader);
-        */
     }
 }
