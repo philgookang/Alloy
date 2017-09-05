@@ -15,7 +15,7 @@ class WebConnect {
 
 
         // get uri list
-        $uri_list = array_filter(explode('/', $uri));
+        $uri_list = explode('/', $uri);
 
         // get hash key
         $key_list = clean_array($uri_list);
