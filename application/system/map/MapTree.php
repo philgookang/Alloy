@@ -175,8 +175,11 @@ class MapTree {
             }
         }
 
+        // get parent allow instance
+        $alloy = Alloy::init();
 
-        if ( $index_level == count($key_list)) {
+
+        if ( ($alloy->config['location']['collapse_index']) && ($index_level == count($key_list)) ) {
 
             if ($show_log) {
                 echo '<br>one last check <br><br>';
