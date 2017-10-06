@@ -19,7 +19,7 @@ class Viewer {
         // get alloy instance
         $alloy = Alloy::init();
 
-        if ($alloy->config['view']['html_minify'] == 'react') {
+        if ($alloy->config['view']['view_type'] == 'react') {
             $view_file = $this->react_view();
         } else if ($alloy->config['view']['view_type'] == 'html') {
             foreach($this->view_list as $view) {
