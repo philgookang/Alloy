@@ -13,9 +13,11 @@ class WebConnect {
         // get request method
         $REQUEST_METHOD = (isset($_SERVER["REQUEST_METHOD"])) ? $_SERVER["REQUEST_METHOD"] : 'GET';
 
+        // lets not parse any get params
+        $uri_list = explode('?', $uri);
 
         // get uri list
-        $uri_list = explode('/', $uri);
+        $uri_list = explode('/', $uri_list);
 
         // get hash key
         $key_list = clean_array($uri_list);
